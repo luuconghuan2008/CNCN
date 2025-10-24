@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhã Nhạc Sound Key Maker</title>
+    
+    <style>
+        /* styles.css */
+
+        /* Font đẹp cho tiêu đề và giao diện */
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Montserrat:wght@400;600&display=swap');
+
+        body {
+            font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+            background: linear-gradient(120deg, #fbeee6 0%, #e0eafc 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            padding-bottom: 50px; /* Thêm padding cho nội dung cuối trang */
+        }
+
+        h1 {
+            font-family: 'Merriweather', serif;
+            font-size: clamp(1.8em, 4vw, 2.8em);
+            color: #B71C1C;
+            margin: 24px 0 10px 0;
+            letter-spacing: 2px;
+            text-shadow: 2px 4px 16px #FFD70088, 0 1px 0 #fff;
+            padding: 0 10px;
+        }
+
+        .bg-parallax {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .bg-sky {
+            position: absolute;
+            width: 100vw; height: 100vh;
+            background: linear-gradient(120deg,#FFD700 0%,#B71C1C 100%);
+            opacity: 0.18;
+            z-index: 1;
+        }
+        .bg-cloud {
+            position: absolute;
+            width: 180px; height: 80px;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0.18;
+            filter: blur(8px);
+            animation: cloudMove 18s linear infinite;
+        }
+        .cloud1 { top: 60px; left: 10vw; animation-delay: 0s;}
+        .cloud2 { top: 120px; left: 60vw; animation-delay: 6s;}
+        @keyframes cloudMove {
+            0% { left: -200px; }
+            100% { left: 100vw; }
+        }
+        .bg-lantern {
+            position: absolute;
+            width: 48px; height: 80px;
+            background: radial-gradient(circle at 50% 60%,#FFD700 60%,#B71C1C 100%);
+            border-radius: 50% 50% 60% 60%;
+            opacity: 0.25;
+            animation: lanternSwing 3s ease-in-out infinite;
+            box-shadow: 0 0 32px #FFD70088;
+        }
+        .lantern1 { top: 40vh; left: 18vw; animation-delay: 0s;}
+        .lantern2 { top: 30vh; left: 72vw; animation-delay: 1.5s;}
+        @keyframes lanternSwing {
+            0% { transform: rotate(-6deg);}
+            50% { transform: rotate(6deg);}
+            100% { transform: rotate(-6deg);}
+        }
+        /* Dragon placeholder - Using an Emoji/Text instead of image */
+        .bg-dragon {
+            position: absolute;
+            bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 340px; height: 130px;
+            /* background: url('images/dragon.png') no-repeat center/contain; */
+            opacity: 0.1;
+            z-index: 2;
+            font-size: 10em;
+            color: #B71C1C;
+            line-height: 130px;
+            filter: drop-shadow(0 0 32px #FFD70088);
+        }
+
+        /* Sân khấu */
+        .stage {
+            width: 90%;
+            max-width: 900px;
+            margin: 0 auto 18px auto;
+            position: relative;
+            z-index: 2;
+        }
+        /* Stage Placeholder Styling (Instead of images/stage.png) */
+        .stage-img {
+            width: 100%;
+            max-width: 600px;
+            height: 200px; /* Placeholder height */
+            background: linear-gradient(to bottom, #FFD700, #B71C1C);
+            display: block;
+            margin: 0 auto;
+            border-radius: 32px;
+            box-shadow: 0 12px 48px #b71c1c33, 0 0 0 8px #FFD70044;
+            border: 5px solid #FFD700;
+            content: "SÂN KHẤU HOÀNG GIA";
+            text-align: center;
+            line-height: 200px;
+            font-size: 2em;
+            color: white;
+            font-weight: bold;
+            font-family: 'Merriweather', serif;
+        }
+
+        /* Dàn avatar performer */
+        .avatars {
+            display: flex;
+            justify-content: center;
+            gap: clamp(10px, 4vw, 32px);
+            margin-bottom: 22px;
+            position: relative;
+            z-index: 2;
+        }
+        .avatar {
+            width: clamp(50px, 12vw, 100px);
+            height: clamp(80px, 18vw, 150px);
+            background: linear-gradient(120deg,#fffbe6 60%,#e0c3fc 100%);
+            border-radius: 22px 22px 36px 36px;
+            box-shadow: 0 6px 24px #6a1b9a22, 0 0 0 4px #FFD70044;
+            border: 4px solid #FFD700;
+            position: relative;
+            overflow: hidden;
+            transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            cursor: pointer;
+        }
+        /* Avatar Placeholder (Instead of images/avatarX.png) */
+        .avatar:nth-child(1)::after { content: '🤵'; }
+        .avatar:nth-child(2)::after { content: '🧝'; }
+        .avatar:nth-child(3)::after { content: '🪖'; }
+        .avatar:nth-child(4)::after { content: '👸'; }
+        .avatar:nth-child(5)::after { content: '👲'; }
+        
+        .avatar.active {
+            border-color: #B71C1C;
+            box-shadow: 0 0 32px #B71C1Cbb, 0 0 0 8px #FFD70044;
+            animation: avatarGlow 1.2s infinite;
+            transform: scale(1.07) translateY(-8px);
+        }
+        @keyframes avatarGlow {
+            0% { box-shadow: 0 0 32px #B71C1Cbb, 0 0 0 8px #FFD70044; }
+            50% { box-shadow: 0 0 64px #FFD70066, 0 0 0 16px #B71C1C22; }
+            100% { box-shadow: 0 0 32px #B71C1Cbb, 0 0 0 8px #FFD70044; }
+        }
+
+        /* Thanh công cụ nhạc cụ */
+        .instruments {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: clamp(10px, 3vw, 22px);
+            margin: 0 auto 36px auto;
+            max-width: 800px;
+            padding: 18px 10px;
+            background: rgba(255,255,255,0.85);
+            border-radius: 22px;
+            box-shadow: 0 8px 32px rgba(155,89,182,0.10);
+            border: 2px solid #FFD700;
+            z-index: 2;
+            position: relative;
+        }
+
+        .instrument-btn {
+            border-radius: 50%;
+            width: clamp(50px, 12vw, 70px);
+            height: clamp(50px, 12vw, 70px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(1.5em, 5vw, 2.2em);
+            margin: 5px;
+            border: 4px solid #FFD700;
+            box-shadow: 0 2px 12px rgba(52,152,219,0.14);
+            background: #fff;
+            transition: transform 0.18s, box-shadow 0.18s, border-color 0.22s;
+            position: relative;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: bold;
+            cursor: grab;
+            user-select: none;
+        }
+        
+        .instrument-btn[draggable="false"] {
+            cursor: not-allowed;
+        }
+
+        .instrument-btn:hover:not([draggable="false"]) {
+            transform: scale(1.12) rotate(-6deg);
+            box-shadow: 0 8px 24px rgba(52,152,219,0.22);
+            z-index: 2;
+            border-color: #B71C1C;
+        }
+
+        .instrument-btn.active {
+            border-color: #FFEB3B;
+            box-shadow: 0 0 0 8px #ffe08288;
+            animation: btnPulse 1s infinite;
+        }
+        @keyframes btnPulse {
+            0% { box-shadow: 0 0 0 8px #ffe08288; }
+            50% { box-shadow: 0 0 0 18px #ffd70044; }
+            100% { box-shadow: 0 0 0 8px #ffe08288; }
+        }
+
+        .instrument-btn.red    { background: linear-gradient(120deg,#B71C1C 60%,#f7b1a3 100%); color: #fff; }
+        .instrument-btn.yellow { background: linear-gradient(120deg,#FFD700 60%,#fff6b7 100%); color: #333; }
+        .instrument-btn.blue   { background: linear-gradient(120deg,#0D47A1 60%,#b3e0ff 100%); color: #fff; }
+        .instrument-btn.purple { background: linear-gradient(120deg,#6A1B9A 60%,#e0c3fc 100%); color: #fff; }
+
+        /* Tooltip cho nút nhạc cụ */
+        .instrument-btn:hover::after {
+            content: attr(data-label);
+            position: absolute;
+            top: -38px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #FFD700;
+            color: #B71C1C;
+            font-size: 1em;
+            font-family: 'Montserrat', sans-serif;
+            padding: 6px 16px;
+            border-radius: 12px;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px #B71C1C33;
+            z-index: 10;
+            opacity: 1;
+            pointer-events: none;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .instrument-btn::after {
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        /* Khu vực slot kéo-thả */
+        .slots {
+            display: flex;
+            justify-content: center;
+            gap: clamp(10px, 3vw, 28px);
+            margin-bottom: 32px;
+        }
+        .slot {
+            width: clamp(70px, 18vw, 100px);
+            height: clamp(70px, 18vw, 100px);
+            border: 3px dashed #888;
+            border-radius: 16px;
+            font-size: clamp(10px, 3vw, 22px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            transition: border-color 0.22s, background 0.22s, box-shadow 0.22s;
+            box-shadow: 0 2px 16px rgba(52,152,219,0.09);
+            font-weight: 600;
+            position: relative;
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+            padding: 5px;
+            cursor: pointer;
+        }
+        .slot.filled {
+            border-style: solid;
+            border-color: #B71C1C;
+            background: rgba(183, 28, 28, 0.1);
+            box-shadow: 0 4px 24px rgba(155,89,182,0.18);
+        }
+        .slot.drag-over {
+            border-color: #FFD700;
+            background: #fffde7;
+            box-shadow: 0 0 0 6px #FFD70033;
+        }
+        .slot-label {
+            font-size: 0.8em;
+            font-weight: normal;
+            margin-top: 5px;
+            color: #333;
+        }
+        
+        /* Nút Play/Stop */
+        #play-stop-btn {
+            padding: 12px 32px;
+            font-size: 18px;
+            background: linear-gradient(135deg, #0D47A1, #3498db);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 16px rgba(13, 71, 161, 0.3);
+            transition: background 0.22s, transform 0.18s;
+            letter-spacing: 1px;
+            font-family: 'Montserrat', sans-serif;
+            margin-right: 20px;
+        }
+        #play-stop-btn:hover:not(:disabled) {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #3498db, #0D47A1);
+        }
+        #play-stop-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            filter: grayscale(1);
+        }
+
+
+        #status-message {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 16px;
+            color: #6A1B9A;
+            font-style: italic;
+            letter-spacing: 1px;
+            font-family: 'Montserrat', sans-serif;
+            min-height: 20px;
+        }
+        
+        .loading-spinner {
+            border: 4px solid #f3f3f3; /* Light grey */
+            border-top: 4px solid #B71C1C; /* Red */
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        audio {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.5em; }
+            .stage-img { max-width: 90%; height: 120px; line-height: 120px; font-size: 1.2em; border-radius: 16px; }
+            .avatar { width: 44px; height: 70px; font-size: 2em;}
+            .avatars { gap: 6px; }
+            .instrument-btn { width: 36px; height: 36px; font-size: 1em; margin: 3px; }
+            .slots { gap: 6px; }
+            .slot { width: 40px; height: 40px; font-size: 10px; }
+            #play-stop-btn { font-size: 14px; padding: 10px 18px; margin: 10px 5px; }
+            #status-message { font-size: 14px; }
+            .instrument-btn:hover::after { top: -30px; font-size: 0.8em; padding: 4px 10px; border-radius: 8px;}
+        }
+    </style>
+</head>
+<body>
+    <!-- Background động cung đình -->
+    <div class="bg-parallax">
+        <div class="bg-sky"></div>
+        <div class="bg-cloud cloud1"></div>
+        <div class="bg-cloud cloud2"></div>
+        <div class="bg-lantern lantern1"></div>
+        <div class="bg-lantern lantern2"></div>
+        <div class="bg-dragon">🐲</div> <!-- Dragon Emoji Placeholder -->
+    </div>
+
+    <!-- Sân khấu cung đình -->
+    <div class="stage">
+        <div class="stage-img">SÂN KHẤU HOÀNG GIA</div>
+    </div>
+    <h1>Music Maker Nhã Nhạc Cung Đình Huế</h1>
+
+    <!-- Dàn nhân vật performer - Dùng placeholder emoji -->
+    <div class="avatars">
+        <div class="avatar" id="avatar-1" data-slot="1"></div>
+        <div class="avatar" id="avatar-2" data-slot="2"></div>
+        <div class="avatar" id="avatar-3" data-slot="3"></div>
+        <div class="avatar" id="avatar-4" data-slot="4"></div>
+        <div class="avatar" id="avatar-5" data-slot="5"></div>
+    </div>
+
+    <!-- Thanh công cụ nhạc cụ -->
+    <div class="instruments">
+        <!-- Bộ gõ (Percussion - Đỏ) - Đang dùng files .wav có sẵn -->
+        <div class="instrument-btn red" draggable="true" data-sound="trong-ban" data-label="Trống bản">🥁</div>
+        <div class="instrument-btn red" draggable="true" data-sound="trong-chien" data-label="Trống chiến">🥁</div>
+        <div class="instrument-btn red" draggable="true" data-sound="phach" data-label="Phách">🪵</div>
+        <div class="instrument-btn red" draggable="true" data-sound="song-loan" data-label="Song loan">🔔</div>
+        <!-- Bộ dây (Strings - Vàng) - Tạm dùng lại files .wav có sẵn vì không có files nhạc cụ khác -->
+        <div class="instrument-btn yellow" draggable="true" data-sound="dan-nguyet" data-label="Đàn nguyệt">🪕</div>
+        <div class="instrument-btn yellow" draggable="true" data-sound="dan-ty-ba" data-label="Đàn tỳ bà">🎸</div>
+        <div class="instrument-btn yellow" draggable="true" data-sound="dan-nhi" data-label="Đàn nhị">🎻</div>
+        <div class="instrument-btn yellow" draggable="true" data-sound="tam-thap-luc" data-label="Tam thập lục">🔨</div>
+    </div>
+
+    <!-- Khu vực slot để kéo-thả -->
+    <div class="slots">
+        <div class="slot" data-slot="1">Nhạc công 1</div>
+        <div class="slot" data-slot="2">Nhạc công 2</div>
+        <div class="slot" data-slot="3">Nhạc công 3</div>
+        <div class="slot" data-slot="4">Nhạc công 4</div>
+    </div>
+    
+    <!-- Các nút điều khiển -->
+    <div class="flex justify-center items-center">
+        <button id="play-stop-btn" disabled>Play (4 Slots Required)</button>
+    </div>
+    <div id="status-message">Kéo thả 4 nhạc cụ vào các vị trí nhạc công.</div>
+    
+    <!-- Thẻ audio cho từng nhạc cụ (sử dụng 4 file .wav gốc) -->
+    <!-- We need 4 distinct audio elements because 4 different files might play simultaneously. -->
+    <audio id="audio-track-1" data-filepath="sounds/đàn.wav" loop></audio>
+    <audio id="audio-track-2" data-filepath="sounds/trống kèn-2.wav" loop></audio>
+    <audio id="audio-track-3" data-filepath="sounds/trống chiêng.wav" loop></audio>
+    <audio id="audio-track-4" data-filepath="sounds/trống kèn chiếng.wav" loop></audio>
+
+    <script>
+        
+        // --- Configuration ---
+        // Map sound name to the actual audio file path (4 unique files used by 8 instruments)
+        const AUDIO_FILE_PATHS = {
+            'trong-ban': 'sounds/đàn.wav',
+            'trong-chien': 'sounds/trống kèn-2.wav',
+            'phach': 'sounds/trống chiêng.wav',
+            'song-loan': 'sounds/trống kèn chiếng.wav',
+            'dan-nguyet': 'sounds/đàn.wav',
+            'dan-ty-ba': 'sounds/trống kèn-2.wav',
+            'dan-nhi': 'sounds/trống chiêng.wav',
+            'tam-thap-luc': 'sounds/trống kèn chiếng.wav',
+        };
+
+        // Define 4 distinct Soundtracks (Playlists) using the 4 unique audio file paths (A, B, C, D)
+        // A = sounds/đàn.wav, B = sounds/trống kèn-2.wav, C = sounds/trống chiêng.wav, D = sounds/trống kèn chiếng.wav
+        // The playlists are defined by the required audio file paths
+        const AUDIO_FILES = [
+            'sounds/đàn.wav',
+            'sounds/trống kèn-2.wav',
+            'sounds/trống chiêng.wav',
+            'sounds/trống kèn chiếng.wav',
+        ];
+
+        const SOUNDTRACK_PLAYLISTS = [
+            // Playlist 0: The Full Ensemble (A, B, C, D)
+            [AUDIO_FILES[0], AUDIO_FILES[1], AUDIO_FILES[2], AUDIO_FILES[3]],
+            // Playlist 1: Percussion Focus (A, C, D)
+            [AUDIO_FILES[0], AUDIO_FILES[2], AUDIO_FILES[3]],
+            // Playlist 2: String/Wind Focus (A, B)
+            [AUDIO_FILES[0], AUDIO_FILES[1]],
+            // Playlist 3: Duet (C, D)
+            [AUDIO_FILES[2], AUDIO_FILES[3]],
+        ];
+        const NUM_SOUNDTRACKS = SOUNDTRACK_PLAYLISTS.length;
+
+        // --- DOM Elements & State ---
+        const instrumentButtons = document.querySelectorAll('.instrument-btn');
+        const slots = document.querySelectorAll('.slot');
+        const playStopBtn = document.getElementById('play-stop-btn');
+        const statusMessage = document.getElementById('status-message');
+        const audioElements = [
+            document.getElementById('audio-track-1'),
+            document.getElementById('audio-track-2'),
+            document.getElementById('audio-track-3'),
+            document.getElementById('audio-track-4'),
+        ];
+
+        let isPlaying = false;
+
+        // Helper: lấy label hiển thị cho sound
+        function btnLabel(sound) {
+            const btn = document.querySelector(`.instrument-btn[data-sound="${sound}"]`);
+            return btn ? btn.getAttribute('data-label') : sound;
+        }
+        
+        // Helper: Cập nhật trạng thái
+        function updateStatus(message, isError = false) {
+            statusMessage.textContent = message;
+            statusMessage.style.color = isError ? '#B71C1C' : '#0D47A1';
+        }
+
+        // --- DRAG & DROP LOGIC ---
+
+        function updatePlayButtonState() {
+            const filledSlots = Array.from(slots).filter(slot => slot.dataset.sound).length;
+            const isFull = filledSlots === 4;
+            playStopBtn.disabled = !isFull;
+            
+            if (isFull) {
+                updateStatus('4 nhạc cụ đã được chọn! Nhấn Play để nghe một nhạc phẩm ngẫu nhiên.');
+            } else {
+                updateStatus(`Hãy kéo thả thêm ${4 - filledSlots} nhạc cụ vào các vị trí nhạc công.`);
+            }
+        }
+
+        instrumentButtons.forEach(btn => {
+            btn.addEventListener('dragstart', e => {
+                if (btn.classList.contains('used')) {
+                    e.preventDefault();
+                    return false;
+                }
+                e.dataTransfer.setData('sound', btn.dataset.sound);
+                e.dataTransfer.setData('label', btn.dataset.label);
+                e.dataTransfer.effectAllowed = 'copy';
+                btn.classList.add('active');
+            });
+            btn.addEventListener('dragend', () => {
+                btn.classList.remove('active');
+            });
+        });
+
+        slots.forEach(slot => {
+            slot.addEventListener('dragover', e => {
+                e.preventDefault();
+                slot.classList.add('drag-over');
+                e.dataTransfer.dropEffect = 'copy';
+            });
+
+            slot.addEventListener('dragleave', () => {
+                slot.classList.remove('drag-over');
+            });
+
+            slot.addEventListener('drop', e => {
+                e.preventDefault();
+                slot.classList.remove('drag-over');
+                const sound = e.dataTransfer.getData('sound');
+                const label = e.dataTransfer.getData('label');
+
+                if (!sound || !AUDIO_FILE_PATHS[sound]) {
+                    updateStatus('Lỗi: Nhạc cụ không hợp lệ.', true);
+                    return;
+                }
+                
+                stopAllMusic(true);
+
+                // Logic Trả nút cũ
+                const oldSound = slot.dataset.sound;
+                if (oldSound && oldSound !== sound) {
+                    const oldBtn = document.querySelector(`.instrument-btn[data-sound="${oldSound}"]`);
+                    if (oldBtn) {
+                        oldBtn.classList.remove('used');
+                        oldBtn.setAttribute('draggable', 'true');
+                        oldBtn.style.filter = '';
+                        oldBtn.style.opacity = '';
+                    }
+                    document.getElementById(`avatar-${slot.dataset.slot}`).classList.remove('active');
+                }
+                
+                // Cài đặt slot mới
+                slot.innerHTML = `<div>${btnLabel(sound).split(' ')[0]}</div><div class="slot-label">${label}</div>`;
+                slot.classList.add('filled');
+                slot.dataset.sound = sound;
+
+                // Vô hiệu hóa nút vừa dùng
+                const btn = document.querySelector(`.instrument-btn[data-sound="${sound}"]`);
+                if (btn) {
+                    btn.classList.add('used');
+                    btn.setAttribute('draggable', 'false');
+                    btn.style.filter = 'grayscale(1) brightness(1.5)';
+                    btn.style.opacity = '0.5';
+                }
+
+                // Kích hoạt avatar
+                document.getElementById(`avatar-${slot.dataset.slot}`).classList.add('active');
+                
+                updatePlayButtonState();
+            });
+
+            // Click vào slot để reset
+            slot.addEventListener('click', () => {
+                const sound = slot.dataset.sound;
+                if (!sound) return;
+                
+                stopAllMusic(true);
+
+                // Kích hoạt lại nút vừa dùng
+                const btn = document.querySelector(`.instrument-btn[data-sound="${sound}"]`);
+                if (btn) {
+                    btn.classList.remove('used');
+                    btn.setAttribute('draggable', 'true');
+                    btn.style.filter = '';
+                    btn.style.opacity = '';
+                }
+                
+                // Reset slot
+                slot.innerText = `Nhạc công ${slot.dataset.slot}`;
+                slot.classList.remove('filled');
+                slot.dataset.sound = '';
+
+                // Tắt avatar
+                document.getElementById(`avatar-${slot.dataset.slot}`).classList.remove('active');
+                
+                updatePlayButtonState();
+            });
+        });
+
+        // --- MUSIC PLAYBACK LOGIC ---
+
+        function stopAllMusic(resetPlayBtn = false) {
+            audioElements.forEach(audio => {
+                audio.pause();
+                audio.currentTime = 0;
+                audio.loop = false;
+            });
+            if (resetPlayBtn) {
+                isPlaying = false;
+                playStopBtn.innerText = 'Play (4 Slots Required)';
+                // Remove active class from all avatars when stopping
+                document.querySelectorAll('.avatar').forEach(avatar => avatar.classList.remove('active'));
+            }
+        }
+
+        /** Plays the set of tracks defined by the playlist index. */
+        function playPlaylist(playlistIndex) {
+            const playlist = SOUNDTRACK_PLAYLISTS[playlistIndex];
+            if (!playlist || playlist.length === 0) {
+                 updateStatus('Lỗi: Playlist rỗng.', true);
+                 return;
+            }
+
+            stopAllMusic(); // Ensure all sounds are off
+            
+            // Assign playlist tracks to the 4 available audio elements
+            playlist.forEach((path, index) => {
+                if (audioElements[index]) {
+                    audioElements[index].src = path;
+                    audioElements[index].load(); // Load the new source
+                    audioElements[index].loop = true;
+                    // Play immediately after load
+                    audioElements[index].play().catch(e => console.error(`Error playing track ${index + 1}:`, e));
+                }
+            });
+
+            // If the playlist has fewer than 4 tracks, the remaining audioElements remain stopped/unused, which is fine.
+
+            isPlaying = true;
+            playStopBtn.innerText = 'Stop';
+            updateStatus(`Đang phát Soundtrack ngẫu nhiên ${playlistIndex + 1} (${playlist.length} files)...`);
+            
+            // Highlight filled avatars during playback
+            document.querySelectorAll('.slot.filled').forEach(slot => {
+                 document.getElementById(`avatar-${slot.dataset.slot}`).classList.add('active');
+            });
+        }
+        
+        /** Handles the main Play/Stop button click. */
+        function handlePlaySound() {
+            
+            if (isPlaying) {
+                stopAllMusic(true);
+                updateStatus('Đã dừng nhạc hòa tấu.');
+                return;
+            }
+
+            const filledSlots = Array.from(slots).filter(slot => slot.dataset.sound).length;
+            if (filledSlots !== 4) {
+                // This shouldn't happen if the button is correctly disabled, but as a safeguard.
+                updateStatus('Yêu cầu 4 nhạc cụ được chọn để phát nhạc.', true);
+                return;
+            }
+
+            // 1. Randomly select a playlist index
+            const soundtrackIndex = Math.floor(Math.random() * NUM_SOUNDTRACKS); 
+            
+            // 2. Play the selected random soundtrack
+            playPlaylist(soundtrackIndex);
+            
+            // Reset button text in case there was a loading state (which we removed)
+            playStopBtn.disabled = false;
+            playStopBtn.innerHTML = 'Stop';
+        }
+
+        // --- Event Listeners and Initialization ---
+
+        playStopBtn.addEventListener('click', handlePlaySound);
+
+        // Initial setup on window load
+        window.onload = function() {
+             // Reset all slots and audio on initial load
+             slots.forEach(slot => {
+                slot.innerText = `Nhạc công ${slot.dataset.slot}`;
+                slot.classList.remove('filled');
+                slot.dataset.sound = '';
+            });
+            stopAllMusic(true);
+            updatePlayButtonState();
+            
+             // Pre-load audio sources to avoid delay on first play
+             AUDIO_FILES.forEach((path, index) => {
+                 if (audioElements[index]) {
+                     audioElements[index].src = path;
+                     audioElements[index].load();
+                 }
+             });
+        }
+    </script>
+</body>
+</html>
